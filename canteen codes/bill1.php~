@@ -1,0 +1,112 @@
+<html>
+<head>
+<style>
+ <!--
+ body {
+ background-image: url(t1.jpg);
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+
+/* Safari and Chrome */
+-webkit-background-size: 100% 100%;
+
+/* Firefox */
+-moz-background-size: 100% 100%;
+
+/* Internet Explorer */
+-ms-background-size: 100% 100%;
+
+/* Opera */
+-o-background-size: 100% 100%;
+
+/* CSS3 */
+background-size: 100% 100%; }
+ //-->
+ </style> 
+</head>
+<body>
+<div align="center">
+<h1> BILL :</h1>
+<?php
+require 'core.inc.php';
+require 'connect.inc.php';
+ob_start();
+
+if(isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) 
+{$g=0;
+if(isset($_POST['delivery']))
+{
+echo 'Please logout after checking the bill.<a href="logout.php"><br><br>logout</a>';
+$id=$_SESSION['user_id'];
+$query="SELECT `username` from `user` where `id`='$id'";
+$row1=mysql_fetch_row(mysql_query($query));
+$name=$row1[0];
+$sum=0;
+$c=0;
+$delivery=$_POST['delivery'];
+$sql="SELECT * FROM `$name`";
+      $result=mysql_query($sql);
+
+    echo "<table text-align:center border='2'>
+    <tr>
+    <th>Item id </th>
+    <th>Item Name </th>
+    <th> Item Quantity </th> 
+    </tr>";
+
+    while($row = mysql_fetch_array($result))
+    {
+    echo "<tr>";
+    echo "<td>" . $row['id'] . "</td>";
+    echo "<td>" . $row['name'] . "</td>";
+    echo "<td>" . $row['quantity']. "</td>";
+    $sum=$sum+$row['total'];
+    $c=$c.$row['name']."->".$row['quantity']."<br>";	 
+// echo "<td><input type="checkbox" name="items[]" value="<?php echo $row['item_code']; >?">.</td>";
+   $g=$c;
+	 }
+echo "</table>";
+if($sum>=250)
+{
+$sum=$sum;
+}
+
+else
+{
+if($delivery=="Table-service")
+{$sum=$sum;}
+else if($delivery=="acad" || $delivery=="suvalsar")
+{
+$sum=$sum+10;
+}
+
+else
+{
+$sum=$sum+30;
+
+}
+
+}
+
+echo "The total bill is".$sum."<br><br><br>";
+
+$my="INSERT INTO orders
+     VALUES('','$name','$g','$sum','$delivery')";
+mysql_query($my);
+}
+$mys="DELETE FROM `$name`";
+mysql_query($mys);
+
+echo 'To return back to previous page, press \'Back\'.<a href="part2.php"><br><br>Back</a> ';
+}
+
+else
+{
+
+header('Location:index.php');
+}
+
+?>
+</div>
+</body>
+</html>

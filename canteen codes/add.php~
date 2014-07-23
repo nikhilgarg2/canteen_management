@@ -1,0 +1,77 @@
+<html>
+<head>
+<style>
+ <!--
+ body {
+ background-image: url(t1.jpg);
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+
+/* Safari and Chrome */
+-webkit-background-size: 100% 100%;
+
+/* Firefox */
+-moz-background-size: 100% 100%;
+
+/* Internet Explorer */
+-ms-background-size: 100% 100%;
+
+/* Opera */
+-o-background-size: 100% 100%;
+
+/* CSS3 */
+background-size: 100% 100%; }
+ //-->
+ </style> 
+</head>
+
+
+<?php
+require 'connect.inc.php';
+require 'core.inc.php';
+
+if(isset($_POST['item_name']) && !empty($_POST['item_name']))
+{
+
+$item=$_POST['item_name'];
+$price=$_POST['base_pr'];
+
+$insert="INSERT into items
+VALUES('','$item','$price')";
+
+mysql_query($insert);
+header('location:admin.php');
+
+}
+
+?>
+<table width="300" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC">
+<tr>
+<form action="add.php" method="POST">
+<td>
+<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
+<tr>
+<td colspan="3"><strong>Add Items </strong></td>
+</tr>
+<tr>
+
+<td>Item name</td> <td>:</td><td> <input type="text" name="item_name"></td>
+</tr>
+<tr>
+<td>Base price</td><td> : </td><td><input type="text" name="base_pr"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><input type="submit" value="confirm"><br><br><br></td>
+</tr></table>
+</td>
+</form>
+</tr>
+
+</table>
+
+
+
+</html>
+
